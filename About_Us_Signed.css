@@ -1,0 +1,66 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    margin: 0;
+}
+.Bar {
+    display: flex;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    justify-content: flex-start;
+    border: none;
+    background-color: #4e2a84; /* Purple background */
+    height: 50px;
+    overflow: hidden;
+}
+
+.Bar a {
+    padding: 14px 16px;
+    display: inline-block;
+    text-decoration: none;
+    color: #fff; /* White text color */
+}
+
+.Bar a:hover {
+    background-color: #6a3aad; /* Darker shade of purple on hover */
+    height: 55px;
+}
+
+.Bar-1 {
+    background-color: #6a3aad; /* Darker shade of purple */
+    height: 50px;
+    width: 40px;
+}
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #4e2a84;
+}
+
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.team-member img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.member-info {
+    text-align: center;
+}
+
+.member-info h2 {
+    margin-bottom: 5px;
+}
+
+.member-info p {
+    margin: 0;
+}

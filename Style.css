@@ -1,0 +1,189 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: lightgrey; /* Dark background */
+  font-family: 'Arial', sans-serif;
+  color: #fff; /* Text color */
+}
+
+.Bar {
+  display: flex;
+  align-items: center;
+  background-color: white ;
+  height: 60px;
+  padding: 0 20px;
+}
+
+.Bar img {
+  width: 45px;
+  height: 45px;
+  opacity: 5px;
+  border-radius: 50%;
+}
+
+.Bar .links {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.Bar a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 16px;
+  margin-left: 20px;
+  text-align: justify;
+
+}
+
+.Bar a:hover {
+  background: #27ae60; /* Change to the green color */
+  border-radius: 20px;
+  width: 50px;
+  height: 30px;
+  color: #fff;
+}
+
+.Bar-2 {
+  margin-left: 20px;
+} /* Adjust as needed */
+  
+#slideshow {
+  text-align: center;
+  overflow: hidden;
+  height: 510px;
+  width: 728px;
+  margin: 20px auto;
+  border: 2px solid #27ae60; /* Border color */
+  background-color: #27ae60; /* Purple background */
+}
+
+.slide-wrapper {
+  display: flex;
+  width: 3640px;
+  animation: slide 18s ease infinite;
+}
+
+.slide {
+  flex: 0 0 728px;
+  height: 510px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.slide:nth-child(1) {
+  background-image: url("Logo.jpg");
+}
+
+.slide:nth-child(2) {
+  background-image: url("Logo1.jpg");
+}
+
+.slide:nth-child(3) {
+  background-image: url("Logo2.jpg");
+}
+
+.slide:nth-child(4) {
+  background-image: url("Logo3.jpg");
+}
+
+@keyframes slide {
+  20% { transform: translateX(0); }
+  30% { transform: translateX(-728px); }
+  50% { transform: translateX(-728px); }
+  60% { transform: translateX(-1456px); }
+  70% { transform: translateX(-1456px); }
+  80% { transform: translateX(-2184px); }
+  90% { transform: translateX(-2184px); }
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: white; /* Purple background */
+  color: black;
+
+}
+
+.text-container {
+  flex: 1;
+  padding-right: 20px;
+}
+
+h2, p {
+  margin-bottom: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  border: 2px solid white; /* Border color */
+  background-color: #27ae60; /* Purple background */
+  width: 270px;
+  height: 400px;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.card-image {
+  background-size: cover;
+  height: 150px;
+}
+
+.card-1 {
+  background-image: url('https://hips.hearstapps.com/hmg-prod/images/new-lead2-1670881359.jpg?resize=2048:*');
+}
+
+.card-2 {
+  background-image: url('https://m.media-amazon.com/images/I/91Zy0+OksKL._AC_UF894,1000_QL80_.jpg');
+}
+
+.card-3 {
+  background-image: url('https://source.widen.net/content/ystlalyddi/jpeg/Christmas-Charm-Glass-Ornaments_SS_SOCIAL-MEDIA-177.jpg?crop=true&keep=c&q=80&color=ffffffff&u=2phlgw&w=720&h=480');
+  height: 180px;
+}
+
+h2, p {
+  margin-bottom: 10px;
+  font-size: 100%;
+  font-style: italic;
+}
+
+footer {
+  background-color: #2c2c2c; /* Dark background */
+  color: black;
+  width: 100%;
+}
+
+.Footer {
+  padding: 20px 30px 40px; 
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+}
+
+.socialIcons a {
+  text-decoration: none;
+  padding: 10px;
+  background-color: #27ae60; /* Purple background */
+  margin: 10px;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.socialIcons a i {
+  font-size: 2em;
+  opacity: 0.9;
+}
