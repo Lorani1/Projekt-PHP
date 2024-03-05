@@ -1,35 +1,40 @@
 <?php
 
-    include 'connect.php';
-    include 'Sign_UP_C.php';
+include 'connect.php';
+include 'Sign_UP_C.php';
 
-    $database = new Database();
-    $db = $database->lidhu();
+$database = new Database();
+$db = $database->lidhu();
 
-    $sign = new Sign($db);
+$sign = new Sign($db);
 
-    $is_admin = true;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $password_confirm = $_POST['pwdrepeat'];
 
+    // Validate password confirmation
+    if ($password !== $password_confirm) {
+        echo 'Password and password confirmation do not match.';
+        exit;
+    }
 
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
+    // Always set user_a to 1 for student during user creation
+    $user_a = 1;
 
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+    $sign->username = $username;
+    $sign->email = $email;
+    $sign->password = $password;
+    $sign->user_a = $user_a;
 
-        $sign->username = $username;
-        $sign->email = $email;
-        $sign->password = $password;
-        $sign->user_a = $is_admin ? 1:0;
-
-       if($sign->create()){
+    if ($sign->create()) {
         header("Location: login.inc.php");
         exit;
-       }else{
+    } else {
         echo 'Failed to create user.';
-       }
-
     }
+}
 
 ?>
 
@@ -75,12 +80,6 @@
                     <span><a href="login.inc.php">Login</a></span>
                 </div>
             </form>
-        </div>
-        <div class="popup" id="popup">
-            <ion-icon name="checkmark-circle-outline"></ion-icon>
-            <h2>Thank you!</h2>
-            <p>Your registration was successful. Thank you!</p>
-            <a href="login.inc.php"><button onclick="CloseSlide()">OK</button></a>
         </div>
     </div>
 

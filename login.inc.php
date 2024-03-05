@@ -1,3 +1,33 @@
+<?php
+include "connect.php";
+include "LoginClass.php";
+
+$database = new Database();
+$db = $database->lidhu();
+$logincheck = new LogIn($db);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $logincheck->username = $username;
+    $logincheck->password = $password;
+
+    if ($logincheck->login()) {
+        // Login successful, redirect to appropriate page
+        if ($_SESSION['user_a'] == 1) {
+            header("Location: Home_Signed.php");
+            exit();
+        } elseif ($_SESSION['user_a'] == 2) {
+            header("Location: adminhome.php");
+            exit();
+        }
+    } else {
+        // Login failed, handle accordingly (display error message?)
+        echo "Login failed";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,11 +57,11 @@
                 <p id="result"></p>
                 <div class="input-box">
                     <i class='bx bxs-envelope'></i>
-                    <input type="text" name="uid" placeholder="Username">
+                    <input type="text" name="username" placeholder="Username">
                 </div>
                 <div class="input-box">
                     <i class='bx bxs-lock-alt'></i>
-                    <input type="password" name="pwd" placeholder="Password">
+                    <input type="password" name="password" placeholder="Password">
                 </div>
 
                 <div class="button">
@@ -43,8 +73,8 @@
     </div>
     <script>
     function validation() {
-        var uid = document.forms["Formfill"]["uid"].value;
-        var pwd = document.forms["Formfill"]["pwd"].value;
+        var uid = document.forms["Formfill"]["username"].value;
+        var pwd = document.forms["Formfill"]["password"].value;
 
         if (uid === "") {
             document.getElementById("result").innerHTML = "Please enter your username.";

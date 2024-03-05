@@ -46,6 +46,59 @@ class Sign {
 
         return $stmt->fetchAll();
     }
+    public function update(){
+        $query = 'UPDATE ' . $this->table_name . ' SET username=:username,email=:email,password=:password,user_a=:user_a WHERE id=:id';
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":username", $this->username);
+        $stmt->bindParam(":email", $this->email);
+        $stmt->bindParam(":password", $this->password);
+        $stmt->bindParam(":user_a", $this->user_a);
+
+        
+        if($stmt->execute()){
+            return true;
+        }
+
+        printf("Error %s. \n ", $stmt->error);
+
+        return false;
+
+    } 
+
+    public function delete(){
+        $query = 'DELETE FROM ' . $this->table_name . ' WHERE id=:id';
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":id", $this->id);
+       
+
+        
+        if($stmt->execute()){
+            return true;
+        }
+
+        printf("Error %s. \n ", $stmt->error);
+
+        return false;
+    }
+
+    public function existsUser(){
+        $query = 'SELECT COUNT (*) FROM ' .$this->table_name . ' WHERE  username=:username';
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":username",$this->username);
+        
+        if($stmt->execute()){
+            return true;
+        }
+
+        printf("Error %s. \n ", $stmt->error);
+
+        return false;
+    }
 }
 
 ?>
