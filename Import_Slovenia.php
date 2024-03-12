@@ -1,3 +1,17 @@
+<?php
+
+$host = "localhost";
+$user = "root";
+$password = "";
+$db = "projekt";
+
+$data = mysqli_connect($host,$user,$password,$db);
+
+$sql = "SELECT * FROM slovenia";
+
+$result = mysqli_query($data,$sql);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,86 +32,22 @@
     <h1 style="text-align: center;">ALL THE THINGS WE DO EXPORT FROM SLOVENIA</h1>
 
     <div class="container">
-        <article class="card">
-            <div class='card-background'>
-                <img src="Electrical_Machinery.jpg" alt="background" width="100px" height="50px" style="margin-top: 0px;">
-            </div>
-            <div class='content'>
-                <h1 style="text-align: center;">Electrical Machinery</h1>
-                <p> Export of electrical machinery and equipment is a significant component of Slovenia's trade.</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Vehicles.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Vehicles</h1>
-               <p>The automotive industry, including the export of vehicles and automotive components.</p>
-            </div>     
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Manufactured_Goods.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Manufactured Goods</h1>
-                <p> Various manufactured goods, such as metal products and chemicals.</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Petroleum_Products.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Mineral fuels,oils and products</h1>
-                <p>We exports from Slovenia refined Mineral fuels,oils and products</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Chemicals_and_Pharmaceuticals.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Pharmaceuticals</h1>
-                <p>Chemical products, including pharmaceuticals, are among Slovenia's export items..</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Iron_and_steel.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Iron and steel</h1>
-                <p>We exports from Slovenia Iron and steel .</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Machinery_and_Equipment.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Machinery and Equipment:</h1>
-                <p>We exports from Slovenia various machinery and equipment, including industrial machinery, computers, and electronic components.</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
-        <article class="card">
-            <div class='card-background'>
-                <img src="Wine.jpg" alt="background" />
-            </div>
-            <div class='content'>
-               <h1 style="text-align: center;">Wine</h1>
-                <p>We export from Slovenia various Wines.</p>
-            </div>
-            <a href="#"><button><strong>ORDER</strong></button></a>
-        </article>
+        <?php
+            while ($info = $result->fetch_assoc()) {
+        ?>
+            <article class="card">
+                <div class='card-background'>
+                    <img src="<?php echo $info['image']; ?>" alt="background" width="100px" height="50px" style="margin-top: 0px;">
+                </div>
+                <div class='content'>
+                    <h1 style="text-align: center;"><?php echo $info['name']; ?></h1>
+                    <p><?php echo $info['description']; ?></p>
+                </div>
+                <a href="#"><button><strong>ORDER</strong></button></a>
+            </article>
+        <?php
+            }
+        ?>
     </div>
 </body>
 </html>
