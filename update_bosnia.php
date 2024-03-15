@@ -1,7 +1,7 @@
 <?php
 
 // session_start();
-error_reporting(0);
+// error_reporting(0);
 // if(!isset($_SESSION['username'])){
 //     header("location:login.php");
 // }
@@ -27,7 +27,7 @@ if($_GET['product_id']){
 if(isset($_POST['update_product'])){
     $p_id=$_POST['id'];
     $p_name = $_POST['name'];
-    $p_desc = $_POST['description'];
+    $p_desc = mysqli_real_escape_string($data, $_POST['description']);
     $file = $_FILES['image']['name'];
     $dst="./image/".$file;
     $dst_db="image/".$file;
@@ -44,7 +44,9 @@ if(isset($_POST['update_product'])){
     $result2 = mysqli_query($data,$sql2);
 
     if($result2){
-        
+        echo "<script>alert('Update Success');</script>";
+    }else{
+        echo "<script>alert('Update Failed');</script>";
     }
 
 }
@@ -194,7 +196,7 @@ if(isset($_POST['update_product'])){
             <li>
                 <a href="products.php">Products</a>
                 <ul class="nested">
-                    <li><a href="products.php">Albania</a></li>
+                    <li><a href="albania.php">Albania</a></li>
                     <li><a href="kosova.php">Kosova</a></li>
                     <li><a href="serbia.php">Serbia</a></li>
                     <li><a href="slovenia.php">Slovenia</a></li>
@@ -238,7 +240,7 @@ if(isset($_POST['update_product'])){
 
             <h1>Update the product</h1>
             <!-- action="#" method="POST" enctype="multipart/form-data" -->
-            <form action="update_bosnia.php" method="POST" enctype="multipart/form-data">
+            <form  method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $info['id']; ?>">
     <div>
         <label for="name">Product Name:</label>
