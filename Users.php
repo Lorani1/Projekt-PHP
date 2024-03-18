@@ -21,10 +21,10 @@ class AdminDashboard{
         return $result;
     }
 
-    public function deleteContactUsData(){
-        $sql = "DELETE * FROM user WHERE id = $id";
+    public function deleteContactUsData($id){
+        $sql = "DELETE FROM user WHERE id = $id";
 
-        $result = musqli_query($this->data,$sql);
+        $result = mysqli_query($this->data,$sql);
 
         if($result === false){
             echo("Error in SQL query " . mysqli_error($this->data));
@@ -181,7 +181,7 @@ $adminDashboard = new AdminDashboard($host,$user,$password,$db);
                 </ul>
             </li>
             <li>
-                <a href="">Export</a>
+                <a href="export_db.php">Export</a>
             </li>
             <li>
                 <a href="contactus._admin.php">Contact Us</a>
@@ -190,7 +190,7 @@ $adminDashboard = new AdminDashboard($host,$user,$password,$db);
                 <a href="aboutus_addmission.php">About Us</a>
             </li>
             <li>
-                <a href="#">Users</a>
+                <a href="Users.php">Users</a>
             </li>
         </ul>
     </aside>
@@ -211,6 +211,7 @@ $adminDashboard = new AdminDashboard($host,$user,$password,$db);
                         <th  style="padding: 20px; font-size: 15px;">Password</th>
                         <th  style="padding: 20px; font-size: 15px;">User_a</th>
                         <th  style="padding: 20px; font-size: 15px;">Delete</th>
+                        <th  style="padding: 20px; font-size: 15px;">Update</th>
                     </tr>
                     <?php
                     while($info = $result->fetch_assoc()){
@@ -223,6 +224,10 @@ $adminDashboard = new AdminDashboard($host,$user,$password,$db);
                             <td style="padding: 20px;">
                             <?php echo "<a onclick=\"javascript:return confirm('Are you sure you wanna delete this'); \" 
                              href='delete.php?student_id={$info['id']}'>Delete</a>"; ?>
+                        </td>
+                        <td style="padding: 20px;color:black;">
+                            <?php echo " <a href='update_user.php?user_id={$info['id']}' class='btn btn-primary'>Update</a>";
+                            ?>
                         </td>
                         </tr>
                         <?php
