@@ -8,6 +8,7 @@
 // else if($_SESSION['usertype']=='student'){
 //     header("location:login.php");
 // }
+include 'auth.php';
 
 $host = "localhost";
 $user = "root";
@@ -51,6 +52,12 @@ if(isset($_POST['update_product'])){
 
 
 }
+
+if ($_SESSION['user_type'] != 2) {
+    // If user type is not 2, redirect back to login
+    redirectToLogin();
+}
+
 
 ?>
 
@@ -213,7 +220,7 @@ if(isset($_POST['update_product'])){
                 <a href="">Add Products</a>
                 <!-- Nested list for Add Products -->
                 <ul class="nested">
-                    <li><a href="add_product.php">Albania</a></li>
+                    <li><a href="add_Albania.php">Albania</a></li>
                     <li><a href="add_kosova.php">Kosova</a></li>
                     <li><a href="add_serbia.php">Serbia</a></li>
                     <li><a href="add_slovenia.php">Slovenia</a></li>
@@ -226,13 +233,19 @@ if(isset($_POST['update_product'])){
                 </ul>
             </li>
             <li>
-                <a href="">Export</a>
+                <a href="export_db.php">Export</a>
             </li>
             <li>
                 <a href="contactus._admin.php">Contact Us</a>
             </li>
             <li>
                 <a href="aboutus_addmission.php">About Us</a>
+            </li>
+            <li>
+                <a href="Users.php">Users</a>
+            </li>
+            <li>
+                <a href="add_user.php">Add Users</a>
             </li>
         </ul>
     </aside>

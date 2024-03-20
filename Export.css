@@ -46,43 +46,34 @@ body {
     margin-left: 20px;
 }
 
-.Info {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px;
-}
+/* Keep the existing styling for other elements */
 
-
-
-.InputGroup {
-    width: calc(33.33% - 20px);
+.SelectGroup {
+    width: calc(32% - 20px);
     margin: 10px;
-        
 }
 
-.TextAreaGroup {
-    width: 100%;
-    margin: 10px;
-    box-sizing: border-box;
+.SelectGroup label {
+    display: block;
+    margin-bottom: 5px;
 }
 
-.Info label,
-.Info input,
-.Info select,
-.Info textarea {
+.SelectGroup select {
     width: 100%;
-    box-sizing: border-box;
-    padding: 15px;
-    border: 1px solid #555; 
+    padding: 10px;
+    border: 1px solid #555;
     border-radius: 8px;
 }
 
-.Info textarea {
-    height: 200px;
-    resize: vertical;
+.SelectGroup select:focus {
+    outline: none;
 }
+
+.SelectGroup select option {
+    padding: 10px;
+}
+
+
 .hero {
     width: 100%;
     min-height: 100vh;

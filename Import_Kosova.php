@@ -1,4 +1,6 @@
 <?php
+include 'auth.php';
+
     $host = "localhost";
     $user = "root";
     $password = "";
@@ -9,6 +11,12 @@
     $sql = "SELECT * FROM kosova";
 
     $result = mysqli_query($data, $sql);
+    if ($_SESSION['user_type'] == 1) {
+        // User type is 1, continue with regular user functionality
+    } elseif ($_SESSION['user_type'] == 2) {
+        // User type is 2, redirect to admin home
+        redirectToAdminHome();
+    }
 ?>
 
 <!DOCTYPE html>

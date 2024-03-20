@@ -1,4 +1,5 @@
 <?php
+include 'auth.php';
 class Database
 {
     private $host = "localhost";
@@ -52,6 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+if ($_SESSION['user_type'] == 1) {
+    // User type is 1, continue with regular user functionality
+} elseif ($_SESSION['user_type'] == 2) {
+    // User type is 2, redirect to admin home
+    redirectToAdminHome();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <a href="#home"><img src="img/Logo_Banner.jpg" alt="Lyra"></a>
   
       <nav class="Bar">
-        <a href="Main_Signed.php" class="Bar-1">Home</a>
+        <a href="Home_Signed.php" class="Bar-1">Home</a>
         <a href="About_Us_Signed.php">About Us</a>
         <a href="contactUs_Signed.php">Contact Us</a>
         <a href="Export.php">Export</a>

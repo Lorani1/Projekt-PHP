@@ -8,6 +8,9 @@
 // else if($_SESSION['usertype']=='student'){
 //     header("location:login.php");
 // }
+
+include 'auth.php';
+
 $host = "localhost";
 $user = "root";
 $password = "";
@@ -30,6 +33,11 @@ if(isset($_POST['update_user'])) {
     } else {
         echo "Error updating user: " . mysqli_error($data);
     }
+}
+
+if ($_SESSION['user_type'] != 2) {
+    // If user type is not 2, redirect back to login
+    redirectToLogin();
 }
 
 
@@ -217,6 +225,9 @@ if(isset($_POST['update_user'])) {
             </li>
             <li>
                 <a href="Users.php">Users</a>
+            </li>
+            <li>
+                <a href="add_user.php">Add Users</a>
             </li>
         </ul>
     </aside>

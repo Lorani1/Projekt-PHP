@@ -1,3 +1,14 @@
+<?php
+
+include 'auth.php';
+
+if ($_SESSION['user_type'] == 1) {
+  // User type is 1, continue with regular user functionality
+} elseif ($_SESSION['user_type'] == 2) {
+  // User type is 2, redirect to admin home
+  redirectToAdminHome();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

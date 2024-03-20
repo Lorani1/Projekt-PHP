@@ -1,5 +1,5 @@
 <?php
-
+include 'auth.php';
 class AdminDashboard
 {
     private $data;
@@ -50,6 +50,11 @@ $password = "";
 $db = "projekt";
 
 $adminDashboard = new AdminDashboard($host, $user, $password, $db);
+
+if ($_SESSION['user_type'] != 2) {
+    // If user type is not 2, redirect back to login
+    redirectToLogin();
+}
 
 ?>
 
@@ -158,7 +163,7 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
             <li>
                 <a href="products.php">Products</a>
                 <ul class="nested">
-                    <li><a href="products.php">Albania</a></li>
+                    <li><a href="albania.php">Albania</a></li>
                     <li><a href="kosova.php">Kosova</a></li>
                     <li><a href="serbia.php">Serbia</a></li>
                     <li><a href="slovenia.php">Slovenia</a></li>
@@ -174,7 +179,7 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
                 <a href="">Add Products</a>
                 <!-- Nested list for Add Products -->
                 <ul class="nested">
-                    <li><a href="add_product.php">Albania</a></li>
+                    <li><a href="add_Albania.php">Albania</a></li>
                     <li><a href="add_kosova.php">Kosova</a></li>
                     <li><a href="add_serbia.php">Serbia</a></li>
                     <li><a href="add_slovenia.php">Slovenia</a></li>
@@ -187,7 +192,19 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
                 </ul>
             </li>
             <li>
-            <a href="aboutus_addmission.php">About Us</a>
+                <a href="export_db.php">Export</a>
+            </li>
+            <li>
+                <a href="contactus._admin.php">Contact Us</a>
+            </li>
+            <li>
+                <a href="aboutus_addmission.php">About Us</a>
+            </li>
+            <li>
+                <a href="Users.php">Users</a>
+            </li>
+            <li>
+                <a href="add_user.php">Add Users</a>
             </li>
         </ul>
     </aside>

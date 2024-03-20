@@ -64,7 +64,10 @@ body {
 .card {
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0px 18px 36px -18px rgba(0, 0, 0, 0.1),
+      0px 30px 45px -30px rgba(50, 50, 93, 0.25);
   background-color: #fff; /* White background color for card */
   cursor: pointer;
   width: 100%;
@@ -74,7 +77,6 @@ body {
   transition: all 0.2s ease-in-out;
 }
 
-
 .content > h1 {
   font-size: 32px;
   margin-bottom: 16px;
@@ -82,13 +84,18 @@ body {
   color: #333; /* Dark gray text color */
 }
 
-.content > h5 {
+.content > p {
   font-size: 18px;
   line-height: 1.55;
   font-weight: 500;
-  color: #555; /* Slightly lighter gray text color */
+  color: black !important; /* Force the paragraphs' color to black */
 }
 
+.content a {
+  color: #4e2a84; /* Purple link color */
+  text-decoration: none;
+  font-weight: 800;
+}
 
 .content a:hover {
   color: #27ae60;
@@ -113,12 +120,12 @@ body {
   width: 80%;
   height: 50px;
   margin-left: 35px;
-  background-color: rgba(6, 6, 36, 0.737); 
-  color: white;
+  background-color: rgba(6, 6, 36, 0.737); /* Purple button background color */
+  color: #fff; /* White text color for button */
   border: none;
   border-radius: 4px;
   cursor: pointer;
-} 
+}
 
 .card button:hover {
   background-color: #27ae60; /* Dark gray button background color on hover */

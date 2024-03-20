@@ -1,33 +1,48 @@
 <?php
-include "connect.php";
-include "LoginClass.php";
+session_start(); // Start the session
 
-$database = new Database();
-$db = $database->lidhu();
-$logincheck = new LogIn($db);
+$host = "localhost";
+$user = "root";
+$password = "";
+$db = "projekt";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+// Create a connection to the database
+$data = mysqli_connect($host, $user, $password, $db);
 
-    $logincheck->username = $username;
-    $logincheck->password = $password;
+if(!$data) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-    if ($logincheck->login()) {
-        // Login successful, redirect to appropriate page
-        if ($_SESSION['user_a'] == 1) {
+if(isset($_POST['submit'])) {
+    $username = mysqli_real_escape_string($data, $_POST['username']);
+    $password = mysqli_real_escape_string($data, $_POST['password']);
+
+    $sql = "SELECT * FROM user WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($data, $sql);
+
+    if($result && mysqli_num_rows($result) > 0) {
+        $user_data = mysqli_fetch_assoc($result);
+        $user_a = $user_data['user_a'];
+        
+        // Set session variable for user type
+        $_SESSION['user_type'] = $user_a;
+
+        if($user_a == 1) {
+            // Regular user, redirect to Home_Signed.php
             header("Location: Home_Signed.php");
             exit();
-        } elseif ($_SESSION['user_a'] == 2) {
+        } elseif($user_a == 2) {
+            // Admin user, redirect to adminhome.php
             header("Location: adminhome.php");
             exit();
         }
     } else {
-        // Login failed, handle accordingly (display error message?)
-        echo "Login failed";
+        // Login failed
+        echo "<script>displayAlert('Error: Invalid Username or Password.');</script>";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
     <div class="container">
         <div class="form-box">
-            <form action="" method="post" name="Formfill" onsubmit="return validation()">
+            <form action="" method="POST" name="Formfill" onsubmit="return validation()">
                 <h2>Log In</h2>
                 <p id="result"></p>
                 <div class="input-box">

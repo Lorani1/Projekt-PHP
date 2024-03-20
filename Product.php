@@ -9,22 +9,22 @@ class Product
         $this->database = $database;
     }
 
-    public function addProduct($name, $description, $image)
+    public function addProduct($name, $description, $image, $tablename)
     {
         $uploadDirectory = "./image/";
         $dst = $uploadDirectory . $image;
         $dst_db = "image/" . $image;
 
         if (move_uploaded_file($_FILES['image']['tmp_name'], $dst)) {
-            $conn = $this->database->getConnection();
-            $name = mysqli_real_escape_string($conn, $name);
-            $description = mysqli_real_escape_string($conn, $description);
+            $data = $this->database->getConnection();
+            $name = mysqli_real_escape_string($data, $name);
+            $description = mysqli_real_escape_string($data, $description);
 
-            $sql = "INSERT INTO bosnia (name, description, image) VALUES ('$name', '$description', '$dst_db')";
-            $result = mysqli_query($conn, $sql);
+            $sql = "INSERT INTO $tablename (name, description, image) VALUES ('$name', '$description', '$dst_db')";
+            $result = mysqli_query($data, $sql);
 
             if (!$result) {
-                die("Error in SQL query: " . mysqli_error($conn));
+                die("Error: " . mysqli_error($data));
             }
 
             return true;

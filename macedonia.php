@@ -1,5 +1,5 @@
 <?php
-
+include 'auth.php';
 class AdminDashboard
 {
     private $data;
@@ -51,6 +51,11 @@ $db = "projekt";
 
 $adminDashboard = new AdminDashboard($host, $user, $password, $db);
 
+if ($_SESSION['user_type'] != 2) {
+    // If user type is not 2, redirect back to login
+    redirectToLogin();
+}
+
 ?>
 
 
@@ -61,8 +66,6 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        /* Add your CSS styles here */
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -129,37 +132,35 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
             color: white;
         }
 
-        .nav {
-            color: white;
-            text-decoration: none;
-        }
+
+        /* Additional style for nested lists */
         ul.nested {
+            position: absolute;
+            left: 100%;
+            top: 0;
             display: none;
         }
 
-        li:hover ul.nested {
+        li:hover .nested {
             display: block;
+            background-color:lightgrey;
         }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <a href="adminhome.php" class="nav">Admin Dashboard</a>
+        <a href="adminhome.php" class="nav" style="color:white;">Admin Dashboard</a>
         <div class="logout">
-            <a href="logout.php" class="nav">Logout</a>
+            <a href="logout.php" class="nav" style="color:white;">Logout</a>
         </div>
     </header>
-
     <aside>
         <ul>
             <li>
-                <a href="contactus._admin.php">Contact Us</a>
-            </li>
-            <li>
                 <a href="products.php">Products</a>
                 <ul class="nested">
-                    <li><a href="products.php">Albania</a></li>
+                    <li><a href="albania.php">Albania</a></li>
                     <li><a href="kosova.php">Kosova</a></li>
                     <li><a href="serbia.php">Serbia</a></li>
                     <li><a href="slovenia.php">Slovenia</a></li>
@@ -175,7 +176,7 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
                 <a href="">Add Products</a>
                 <!-- Nested list for Add Products -->
                 <ul class="nested">
-                    <li><a href="add_product.php">Albania</a></li>
+                    <li><a href="add_Albania.php">Albania</a></li>
                     <li><a href="add_kosova.php">Kosova</a></li>
                     <li><a href="add_serbia.php">Serbia</a></li>
                     <li><a href="add_slovenia.php">Slovenia</a></li>
@@ -188,10 +189,23 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
                 </ul>
             </li>
             <li>
-                <a href="">About Us</a>
+                <a href="export_db.php">Export</a>
+            </li>
+            <li>
+                <a href="contactus._admin.php">Contact Us</a>
+            </li>
+            <li>
+                <a href="aboutus_addmission.php">About Us</a>
+            </li>
+            <li>
+                <a href="Users.php">Users</a>
+            </li>
+            <li>
+                <a href="add_user.php">Add Users</a>
             </li>
         </ul>
     </aside>
+
 
     <div class="content">
         <h1>Applied for Admission</h1>
@@ -207,6 +221,7 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
                     <th style="padding: 20px; font-size: 15px;">Description</th>
                     <th style="padding: 20px; font-size: 15px;">Image</th>
                     <th style="padding: 20px; font-size: 15px;">Delete</th>
+                    <th style="padding: 20px; font-size: 15px;">Update</th>
                 </tr>
                 <?php
                 while ($info = $result->fetch_assoc()) {
@@ -218,6 +233,10 @@ $adminDashboard = new AdminDashboard($host, $user, $password, $db);
                         <td style="padding: 20px;color:black;">
                             <?php echo "<a onclick=\"javascript:return confirm('Are you sure you wanna delete this'); \" 
                              href='delete.php?student_id={$info['id']}'>Delete</a>"; ?>
+                        </td>
+                        <td style="padding: 20px;color:black;">
+                            <?php echo " <a href='update_macedonia.php?macedonia_id={$info['id']}' class='btn btn-primary'>Update</a>";
+                            ?>
                         </td>
                     </tr>
                     <?php

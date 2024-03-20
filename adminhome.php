@@ -1,3 +1,10 @@
+<?php include 'auth.php';
+
+if ($_SESSION['user_type'] != 2) {
+    // If user type is not 2, redirect back to login
+    redirectToLogin();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,8 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        /* Add your CSS styles here */
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -72,17 +77,22 @@
             background-color: #333;
             color: white;
         }
-        a{
-            color:white;
+
+        a {
+            color: white;
         }
 
         /* Additional style for nested lists */
         ul.nested {
+            position: absolute;
+            left: 100%;
+            top: 0;
             display: none;
         }
 
-        li:hover ul.nested {
+        li:hover .nested {
             display: block;
+            background-color:lightgrey;
         }
     </style>
 </head>
@@ -98,12 +108,9 @@
     <aside>
         <ul>
             <li>
-                <a href="contactus._admin.php">Contact Us</a>
-            </li>
-            <li>
                 <a href="products.php">Products</a>
                 <ul class="nested">
-                    <li><a href="products.php">Albania</a></li>
+                    <li><a href="albania.php">Albania</a></li>
                     <li><a href="kosova.php">Kosova</a></li>
                     <li><a href="serbia.php">Serbia</a></li>
                     <li><a href="slovenia.php">Slovenia</a></li>
@@ -119,7 +126,7 @@
                 <a href="">Add Products</a>
                 <!-- Nested list for Add Products -->
                 <ul class="nested">
-                    <li><a href="add_product.php">Albania</a></li>
+                    <li><a href="add_Albania.php">Albania</a></li>
                     <li><a href="add_kosova.php">Kosova</a></li>
                     <li><a href="add_serbia.php">Serbia</a></li>
                     <li><a href="add_slovenia.php">Slovenia</a></li>
@@ -132,7 +139,19 @@
                 </ul>
             </li>
             <li>
+                <a href="export_db.php">Export</a>
+            </li>
+            <li>
+                <a href="contactus._admin.php">Contact Us</a>
+            </li>
+            <li>
                 <a href="aboutus_addmission.php">About Us</a>
+            </li>
+            <li>
+                <a href="Users.php">Users</a>
+            </li>
+            <li>
+                <a href="add_user.php">Add Users</a>
             </li>
         </ul>
     </aside>

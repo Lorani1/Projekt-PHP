@@ -1,3 +1,13 @@
+* {
+  margin: 10;
+  padding: 0;
+}
+
+body {
+  background-color: #fff; /* White background color */
+  color: #fff; /* White text color */
+}
+
 .Bar {
   display: flex;
   text-decoration: none;
@@ -5,7 +15,7 @@
   margin: 0;
   justify-content: flex-start;
   border: none;
-  background-color: #4e2a84; /* Purple background color */
+  background-color: lightgrey; /* Light grey background color for navbar */
   height: 50px;
   overflow: hidden;
 }
@@ -18,7 +28,7 @@
 }
 
 .Bar a:hover {
-  background-color: #1a1a1a; /* Dark gray background color on hover */
+  background-color: #27ae60; /* Green background color on hover */
   height: 55px;
 }
 
@@ -32,16 +42,6 @@
   height: 50px;
   width: 75px;
   float: right;
-}
-
-* {
-  margin: 10;
-  padding: 0;
-}
-
-body {
-  background-color: #1a1a1a; /* Black background color */
-  color: #fff; /* White text color */
 }
 
 .container {
@@ -98,7 +98,7 @@ body {
 }
 
 .content a:hover {
-  color: #0a2540;
+  color: #27ae60;
 }
 
 .card-background {
@@ -120,7 +120,7 @@ body {
   width: 80%;
   height: 50px;
   margin-left: 35px;
-  background-color: #4e2a84; /* Purple button background color */
+  background-color: rgba(6, 6, 36, 0.737); /* Purple button background color */
   color: #fff; /* White text color for button */
   border: none;
   border-radius: 4px;
@@ -128,5 +128,5 @@ body {
 }
 
 .card button:hover {
-  background-color: #1a1a1a; /* Dark gray button background color on hover */
+  background-color: #27ae60; /* Dark gray button background color on hover */
 }

@@ -1,6 +1,7 @@
 <?php
 include_once "Database.php";
 include_once "Product.php";
+include 'auth.php'
 
 $host = "localhost";
 $user = "root";
@@ -23,6 +24,11 @@ if (isset($_POST['add_product'])) {
         echo "Failed to add product.";
     }
 }
+if ($_SESSION['user_type'] != 2) {
+    // If user type is not 2, redirect back to login
+    redirectToLogin();
+}
+
 
 $database->closeConnection();
 ?>
@@ -168,7 +174,7 @@ $database->closeConnection();
             <li>
                 <a href="products.php">Products</a>
                 <ul class="nested">
-                    <li><a href="products.php">Albania</a></li>
+                    <li><a href="albania.php">Albania</a></li>
                     <li><a href="kosova.php">Kosova</a></li>
                     <li><a href="serbia.php">Serbia</a></li>
                     <li><a href="slovenia.php">Slovenia</a></li>
@@ -197,13 +203,19 @@ $database->closeConnection();
                 </ul>
             </li>
             <li>
-                <a href="">Export</a>
+                <a href="export_db.php">Export</a>
             </li>
             <li>
                 <a href="contactus._admin.php">Contact Us</a>
             </li>
             <li>
                 <a href="aboutus_addmission.php">About Us</a>
+            </li>
+            <li>
+                <a href="Users.php">Users</a>
+            </li>
+            <li>
+                <a href="add_user.php">Add Users</a>
             </li>
         </ul>
     </aside>

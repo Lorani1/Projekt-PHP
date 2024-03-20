@@ -1,6 +1,9 @@
 <?php
+
+include 'auth.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   
+    // Form processing logic
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -8,12 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
-    
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    
     $stmt = $conn->prepare("INSERT INTO export (Cname, Country, pName, Cexport, Price, message, image) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssdss", $Name, $Country, $pName, $eCountry, $Price, $txt, $image);
 
@@ -26,11 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image = $_FILES["image"]["name"]; 
 
     if (empty($Name) || empty($Country) || empty($pName) || empty($eCountry) || empty($Price) || empty($txt) || empty($image)) {
-        
         echo "<script>displayAlert('Error: All fields are required.');</script>";
-        
     } else {
-       
         if ($stmt->execute()) {
             echo "New record created successfully";
         } else {
@@ -43,8 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: Export.php");
         exit();
     }
-
 }
+if ($_SESSION['user_type'] == 1) {
+    // User type is 1, continue with regular user functionality
+} elseif ($_SESSION['user_type'] == 2) {
+    // User type is 2, redirect to admin home
+    redirectToAdminHome();
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
