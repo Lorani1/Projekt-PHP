@@ -56,26 +56,128 @@ if ($_SESSION['user_type'] == 1) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Export.css">
+    
     <style>
-        .SubmitGroup {
-            position: absolute;
-            top: 850px; 
-            left: 50%;
-            transform: translateX(-50%);
-        }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: white; 
+        font-family: 'Arial', sans-serif;
+        color: #fff;
+    }
+    .Bar {
+        display: flex;
+        text-decoration: none;
+        padding: 0;
+        margin: 0;
+        justify-content: flex-start;
+        border: none;
+        background-color: lightgrey; /* Light grey background color for navbar */
+        height: 50px;
+        overflow: hidden;
+    }
+
+    .Bar a {
+        padding: 14px 16px;
+        display: inline-block;
+        text-decoration: none;
+        color: #fff; 
+    }
+
+    .Bar a:hover {
+        background-color: #27ae60;
+        height: 55px;
+    }
+
+    .Bar-1 {
+        background-color: #1a1a1a; 
+        height: 50px;
+        width: 70px;
+        
+    }
+
+    .Bar-2 {
+        height: 50px;
+        width: 75px;
+        float: right;
+    }
+    .Info {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .Info .InputGroup {
+        margin-bottom: 20px;
+    }
+
+    .Info .InputGroup label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .Info input[type="text"],
+    .Info textarea,
+    .Info select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #555;
+        border-radius: 8px;
+        background-color: #fff;
+        color: #000;
+        margin-top: 5px;
+    }
+
+    .Info input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background-color: #27ae60;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .Info input[type="submit"]:hover {
+        background-color: #218e54;
+    }
+
+    .img-view {
+        width: 100%;
+        height: 200px;
+        border-radius: 20px;
+        border: 2px dashed #bbb5ff;
+        background: #f7f8ff;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .img-view img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .SubmitGroup {
+        text-align: center;
+    }
+
     </style>
     <title>Export</title>
 </head>
 <body>
-    <nav class="Bar">
-       <a href="Main_Signed.html"><img src="Logo_Banner.jpg" alt="Lyra"></a> 
-        <div class="links">
-            <a href="About_Us_Signed.php">About Us</a>
-            <a href="contactUs_Signed.php">Contact Us</a>
-            <a href="Import.php">Import</a>
-            <a href="Export.php">Export</a>
-        </div>
+<nav class="Bar">
+        <a href="Home_Signed.php" class="Bar-1">Home</a>
+        <a href="contactUs_Signed.php">Contact Us</a>
+        <a href="About_Us_Signed.php">About Us</a>
+        <a href="Import.php" class="Bar-2">Import</a>
+        <a href="Export.php">Export</a>
     </nav>
 
     <form method="post" enctype="multipart/form-data"> <!-- Changed form action to submit.php -->

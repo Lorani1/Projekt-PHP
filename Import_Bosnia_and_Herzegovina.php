@@ -21,14 +21,13 @@ $result = mysqli_query($data,$sql);
     <title>BOSNIA AND HERZEGOVINA</title>
 </head>
 <body>
-    <nav class="Bar">
-        <a href="Main_Signed.html" class="Bar-1">Home</a>
-        <a href="About_Us_Signed.html">About Us</a>
-        <a href="contactUs_Signed.html">Contact  Us</a>
-        <a href="Import.html" class="Bar-2">Import</a>
-        <a href="Export.html">Export</a>
+<nav class="Bar">
+        <a href="Home_Signed.php" class="Bar-1">Home</a>
+        <a href="About_Us_Signed.php">About Us</a>
+        <a href="contactUs_Signed.php">Contact  Us</a>
+        <a href="Import.php" class="Bar-2">Import</a>
+        <a href="Export.php">Export</a>
     </nav>
-
     <h1 style="text-align: center;">ALL THE THINGS WE EXPORT FROM BOSNIA AND HERZEGOVINA</h1>
 
     <div class="container">

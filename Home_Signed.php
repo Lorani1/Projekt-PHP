@@ -38,7 +38,7 @@ if ($_SESSION['user_type'] == 1) {
   
         <nav class="navbar">
             <a class="active" href="#home">home</a>
-            <a href="About)Us.php">About us</a>
+            <a href="About_Us_Signed.php">About us</a>
             <a href="contactUs_Signed.php">Contact us</a>
             <a href="Export.php">Export</a>
             <a href="Import.php">Import</a>

@@ -11,28 +11,34 @@ body {
     margin: 0;
     justify-content: flex-start;
     border: none;
-    background-color: lightgrey; /* Light grey background for navbar */
+    background-color: lightgrey; /* Light grey background color for navbar */
     height: 50px;
     overflow: hidden;
-}
-
-.Bar a {
+  }
+  
+  .Bar a {
     padding: 14px 16px;
     display: inline-block;
     text-decoration: none;
-    color: #000; /* Black text color */
-}
-
-.Bar a:hover {
-    background-color: #27ae60; /* Green on hover */
+    color: #fff; /* White text color */
+  }
+  
+  .Bar a:hover {
+    background-color: #27ae60; /* Green background color on hover */
     height: 55px;
-}
-
-.Bar-1 {
-    background-color: #27ae60; /* Green color */
+  }
+  
+  .Bar-1 {
+    background-color: #1a1a1a; /* Dark gray background color */
     height: 50px;
     width: 40px;
-}
+  }
+  
+  .Bar-2 {
+    height: 50px;
+    width: 75px;
+    float: right;
+  }
 
 h1 {
     text-align: center;

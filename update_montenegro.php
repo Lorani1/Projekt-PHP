@@ -67,7 +67,7 @@ if ($_SESSION['user_type'] != 2) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        body {
+       body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -87,7 +87,7 @@ if ($_SESSION['user_type'] != 2) {
         }
 
         aside {
-            width: 200px;
+            width: 20%; /* Sidebar width as percentage */
             height: 100%;
             position: fixed;
             background-color: #f1f1f1;
@@ -113,7 +113,7 @@ if ($_SESSION['user_type'] != 2) {
         }
 
         .content {
-            margin-left: 220px;
+            margin-left: 20%; /* Adjusted margin for content */
             padding: 16px;
         }
 
@@ -131,6 +131,30 @@ if ($_SESSION['user_type'] != 2) {
         th {
             background-color: #333;
             color: white;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            aside {
+                width: 100%; /* Full width on smaller screens */
+                position: relative; /* Remove fixed positioning */
+            }
+            .content {
+                margin-left: 0; /* No margin on smaller screens */
+            }
+        }
+
+        /* Additional style for nested lists */
+        ul.nested {
+            position: absolute;
+            left: 100%;
+            top: 0;
+            display: none;
+        }
+
+        li:hover .nested {
+            display: block;
+            background-color:lightgrey;
         }
 
         a {

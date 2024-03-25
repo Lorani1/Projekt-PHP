@@ -57,7 +57,6 @@ if ($_SESSION['user_type'] != 2) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,7 +84,7 @@ if ($_SESSION['user_type'] != 2) {
         }
 
         aside {
-            width: 200px;
+            width: 20%; /* Sidebar width as percentage */
             height: 100%;
             position: fixed;
             background-color: #f1f1f1;
@@ -111,7 +110,7 @@ if ($_SESSION['user_type'] != 2) {
         }
 
         .content {
-            margin-left: 220px;
+            margin-left: 20%; /* Adjusted margin for content */
             padding: 16px;
         }
 
@@ -131,6 +130,16 @@ if ($_SESSION['user_type'] != 2) {
             color: white;
         }
 
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            aside {
+                width: 100%; /* Full width on smaller screens */
+                position: relative; /* Remove fixed positioning */
+            }
+            .content {
+                margin-left: 0; /* No margin on smaller screens */
+            }
+        }
 
         /* Additional style for nested lists */
         ul.nested {
@@ -148,13 +157,12 @@ if ($_SESSION['user_type'] != 2) {
 </head>
 <body>
 
-    <header class="header">
-        <a href="adminhome.php" style="color:white;">Admin Home</a>
-        <div class="logout">
-            <a href="logout.php" class="btn btn-primary" style="color:white;">Logout</a>
-        </div>
-    </header>
-
+<header class="header">
+    <a href="adminhome.php" style="color:white;">Admin Home</a>
+    <div class="logout">
+        <a href="logout.php" class="btn btn-primary" style="color:white;">Logout</a>
+    </div>
+</header>
     <aside>
         <ul>
             <li>

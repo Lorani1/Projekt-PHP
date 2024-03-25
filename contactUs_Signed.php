@@ -71,46 +71,36 @@ if ($_SESSION['user_type'] == 1) {
 <body>
     <div id="overlay">
     <header class="Bar">
-      <a href="#home"><img src="img/Logo_Banner.jpg" alt="Lyra"></a>
-  
-      <nav class="Bar">
+    <nav class="Bar">
         <a href="Home_Signed.php" class="Bar-1">Home</a>
-        <a href="About_Us_Signed.php">About Us</a>
         <a href="contactUs_Signed.php">Contact Us</a>
+        <a href="About_Us_Signed.php">About Us</a>
+        <a href="Import.php" class="Bar-2">Import</a>
         <a href="Export.php">Export</a>
-        <a href="Import.php">Import</a>
     </nav>
-        <div class="icons">
-          <i class="fas fa-bars" id="menu-bars"></i>       
-          <i class="fas fa-search" id="search-icon"></i>
-          <a href="#" class="fas fa-shopping-cart"></a>
-        </div>
-
         
       </header>
-        <form method="post" id="form">
-            <h1>Contact Us</h1>
-            <p id="error" style="color:red;"></p>
+      <div class="container">
+            <form method="post" id="form">
+                <h1>Contact Us</h1>
+                <p id="error" style="color:red;"></p>
 
-            <label for="name">Name:</label>
-            <input type="text" id="name" placeholder="Your Name" name="name">
-           
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Your Name" name="name">
 
-            <label for="email">Email:</label>
-            <input type="text" id="email" placeholder="Your email" name="email">
-            
+                <label for="email">Email:</label>
+                <input type="text" id="email" placeholder="Your email" name="email">
 
-            <label for="message">Message:</label>
-            <textarea id="message" placeholder="Your message" rows="10" name="message"></textarea>
-         
+                <label for="message">Message:</label>
+                <textarea id="message" placeholder="Your message" rows="10" name="message"></textarea>
 
-            <div class="center">
-                <input type="submit" id="submit" value="Apply" name="apply">
-                <p id="success"></p>
-            </div>
-        </form>
+                <div class="center">
+                    <input type="submit" id="submit" value="Apply" name="apply">
+                    <p id="success"></p>
+                </div>
+            </form>
+        </div>
     </div>
-
     <script>
         function displayAlert(message) {
     alert(message);

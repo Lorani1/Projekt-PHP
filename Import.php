@@ -16,12 +16,12 @@ if ($_SESSION['user_type'] == 1) {
     <title>Import</title>
 </head>
 <body>
-    <nav class="Bar">
-        <a href="Main_Signed.php" class="Bar-1">Home</a>
-        <a href="About_Us_Signed.php">About Us</a>
+<nav class="Bar">
+        <a href="Home_Signed.php" class="Bar-1">Home</a>
         <a href="contactUs_Signed.php">Contact Us</a>
+        <a href="About_Us_Signed.php">About Us</a>
+        <a href="Import.php" class="Bar-2">Import</a>
         <a href="Export.php">Export</a>
-        <a href="Import.php">Import</a>
     </nav>
 
     <h1>Countries we export/import from</h1>
@@ -67,12 +67,6 @@ if ($_SESSION['user_type'] == 1) {
             <a href="Import_Hungary.php"><img src="Hungary.jpg" alt="" class="img"></a>
             <div class="views_date">
                 <p>Hungary</p>
-            </div>
-        </div>
-        <div class="Country">
-            <a href="Import_Hungary.php"><img src="Bosnia.jpg" alt="" class="img"></a>
-            <div class="views_date">
-                <p>Bosnia Herzegovina</p>
             </div>
         </div>
         <div class="Country">

@@ -1,8 +1,13 @@
-*{
+* {
     font-family: Arial;
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    background-color: #f2f2f2; /* Greyish background color */
+}
 
 .Bar {
     display: flex;
@@ -11,7 +16,7 @@
     margin: 0;
     justify-content: flex-start;
     border: none;
-    background-color: lightgrey; /* Light grey background for navbar */
+    background-color: lightgrey; /* Light grey background color for navbar */
     height: 50px;
     overflow: hidden;
 }
@@ -20,63 +25,70 @@
     padding: 14px 16px;
     display: inline-block;
     text-decoration: none;
-    color: #000; /* Black text color */
+    color: #fff; /* White text color */
 }
 
 .Bar a:hover {
-    background-color: #27ae60; /* Green on hover */
+    background-color: #27ae60; /* Green background color on hover */
     height: 55px;
 }
 
 .Bar-1 {
-    background-color: #27ae60; /* Green color */
+    background-color: black;
     height: 50px;
-    width: 40px;
+    width: 70px;
+    
 }
 
-body{
-    background-color: rgba(6, 6, 36, 0.737); /* White background color */
+.Bar-2 {
+    height: 50px;
+    width: 75px;
+    float: right;
 }
 
-#overlay{
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    background-color:  rgba(6, 6, 36, 0.737);  /* White background color */
-    background-size: cover;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Set height to 100% of viewport height */
 }
 
-form{
+form {
     max-width: 550px;
     width: 90%;
-    background-color: white;
-    position: fixed;
-    right: 400px;
-    top: 60px;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
     padding: 40px;
-    border-radius: border-box;
+    border-radius: 5px;
 }
 
-h1{
+h1 {
     margin: 0;
+    text-align: center;
+    margin-bottom: 20px;
 }
-label{
+
+label {
     display: block;
     margin: 20px 0;
 }
-input, textarea{
+
+input,
+textarea {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
     outline: none;
     resize: none;
-    border: none;
-    border-bottom: 1px solid #d3d3d3;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
 }
 
-input[type="text"]:focus, textarea:focus{
-    border-bottom: 1px solid #27ae60;
+input[type="text"]:focus,
+textarea:focus {
+    border: 1px solid #27ae60;
 }
+
 input[type="submit"] {
     background-color: #27ae60;
     color: white;
@@ -85,37 +97,26 @@ input[type="submit"] {
     cursor: pointer;
     border: none;
     border-radius: 5px;
+    width: 100%; /* Make button full width */
+    margin-top: 20px; /* Add spacing */
 }
 
 input[type="submit"]:hover {
-    background-color: #27ae60;
+    background-color: #000; /* Black background color on hover */
 }
-textarea::-webkit-scrollbar-thumb{
+
+textarea::-webkit-scrollbar-thumb {
     background-color: purple;
 }
 
-.center{
-    text-align: center;
-}
-.center button{
-    width: 100px;
-    height: 50px;
-    background-color: #27ae60;
-    color: white;
-    width: 90%;
-    max-width: 200px;
-    background-color: linear-gradient(to right, purple);
-    font-size: 17px;
-    cursor: pointer;
-    border-radius: 3px; */
-}
-.error{
+.error {
     color: red;
 }
 
-.error-border{
+.error-border {
     border-bottom: 1px solid red;
 }
-#success{
+
+#success {
     color: #28a745;
 }
