@@ -1,35 +1,33 @@
 <?php
+include_once "connect.php";
+include_once "About.php";
 include 'auth.php';
-include 'connect.php';
+
+$database = new Database();
+$product = new About($database);
+
+if (isset($_POST['add_product'])) {
+    $name = $_POST['name'];
+    $description = $_POST['desc'];
+    $position = $_POST['posit'];
+    $image = $_FILES['image']['name'];
+
+    // Get the table name dynamically based on the page name
+    $tableName = strtolower(substr(basename($_SERVER['PHP_SELF']), 4, -4));
+
+    if ($product->addProduct($name,$position, $description, $image, $tableName)) {
+        // Handle success if needed
+    } else {
+        echo "Failed to add Product.";
+    }
+}
 
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
 }
-
-$db = new Database();
-$conn = $db->lidhu(); // Get the PDO object from the connection
-
-if(isset($_POST['update_user'])) {
-    $id = $_POST['id'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $user_a = $_POST['user_a'];
-
-    try {
-        // Update query
-        $sql = "UPDATE user SET username=?, email=?, password=?, user_a=? WHERE id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$username, $email, $password, $user_a, $id]);
-
-        echo "User updated successfully";
-    } catch(PDOException $e) {
-        echo "Error updating user: " . $e->getMessage();
-    }
-}
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +36,7 @@ if(isset($_POST['update_user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -58,7 +56,7 @@ if(isset($_POST['update_user'])) {
         }
 
         aside {
-            width: 20%; /* Sidebar width as percentage */
+            width: 200px;
             height: 100%;
             position: fixed;
             background-color: #f1f1f1;
@@ -84,7 +82,7 @@ if(isset($_POST['update_user'])) {
         }
 
         .content {
-            margin-left: 20%; /* Adjusted margin for content */
+            margin-left: 220px;
             padding: 16px;
         }
 
@@ -102,30 +100,6 @@ if(isset($_POST['update_user'])) {
         th {
             background-color: #333;
             color: white;
-        }
-
-        /* Media Queries */
-        @media screen and (max-width: 768px) {
-            aside {
-                width: 100%; /* Full width on smaller screens */
-                position: relative; /* Remove fixed positioning */
-            }
-            .content {
-                margin-left: 0; /* No margin on smaller screens */
-            }
-        }
-
-        /* Additional style for nested lists */
-        ul.nested {
-            position: absolute;
-            left: 100%;
-            top: 0;
-            display: none;
-        }
-
-        li:hover .nested {
-            display: block;
-            background-color:lightgrey;
         }
 
         a {
@@ -244,49 +218,32 @@ if(isset($_POST['update_user'])) {
     </aside>
 
     <div class="content">
-        <h1>Update the product</h1>
 
-        <?php
-       if(isset($_GET['user_id'])) {
-        $u_id = $_GET['user_id'];
-        $sql = "SELECT * FROM user WHERE id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$u_id]);
-        $info = $stmt->fetch(PDO::FETCH_ASSOC);
+            <h1>WELCOME TO ADMIN DASHBOARD</h1>
     
-        if($info) {
-        ?>
-
-        <form action="" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?php echo $info['id']; ?>">
+            <form action="#" method="POST" enctype="multipart/form-data">
             <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<?php echo $info['username']; ?>">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name">
             </div>
             <div>
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" value="<?php echo $info['email']; ?>">
+                <label for="desc">Description:</label>
+                <textarea id="desc" name="desc"></textarea>
             </div>
             <div>
-                <label for="password">Password:</label>
-                <input type="text" id="password" name="password" value="<?php echo $info['password']; ?>">
+                <label for="name">Position:</label>
+                <input type="text" id="posit" name="posit">
             </div>
             <div>
-                <label for="user_a">User_a:</label>
-                <input type="text" id="user_a" name="user_a" value="<?php echo $info['user_a']; ?>">
+                <label for="img">Image:</label>
+                <input type="file" id="img" name="image">
             </div>
-            <input type="submit" name="update_user" value="Update User" class="btn btn-success">
+            <div>
+                <input type="submit" name="add_product" value="Add Product">
+            </div>
         </form>
 
-        <?php
-            } else {
-                echo "No user found.";
-            }
-        } else {
-            echo "User ID not provided.";
-        }
-        ?>
-
+        
     </div>
 </body>
 </html>

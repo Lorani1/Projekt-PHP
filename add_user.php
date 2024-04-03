@@ -1,6 +1,6 @@
 <?php
-error_reporting(0);
-include_once "Database.php";
+
+include_once "connect.php";
 include_once "User.php";
 include 'auth.php';
 
@@ -9,7 +9,7 @@ $user = "root";
 $password = "";
 $db = "projekt";
 
-$database = new Database($host, $user, $password, $db);
+$database = new Database();
 $product = new User($database);
 
 if(isset($_POST['add_user'])) {
@@ -34,7 +34,6 @@ if ($_SESSION['user_type'] != 2) {
 }
 
 
-$database->closeConnection();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -229,6 +228,10 @@ $database->closeConnection();
             <h1>WELCOME TO ADMIN DASHBOARD</h1>
     
             <form action="#" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="id" hidden></label>
+                <input type="text" id="id" name="id" hidden>
+            </div>
             <div>
                 <label for="username">UserName:</label>
                 <input type="text" id="username" name="username">

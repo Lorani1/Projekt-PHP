@@ -1,65 +1,68 @@
 <?php
-
-// session_start();
-// error_reporting(0);
-// if(!isset($_SESSION['username'])){
-//     header("location:login.php");
-// }
-// else if($_SESSION['usertype']=='student'){
-//     header("location:login.php");
-// }
 include 'auth.php';
+include 'connect.php';
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
+class AdminHome {
+    private $conn;
 
-$data = mysqli_connect($host, $user, $password, $db);
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
 
+    public function getAboutUsInfo($id) {
+        try {
+            $stmt = $this->conn->prepare("SELECT * FROM aboutus WHERE id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            return false;
+        }
+    }
 
-if($_GET['aboutus_id']){
-    $p_id=$_GET['aboutus_id'];
-    $sql = "SELECT * FROM aboutus WHERE id='$p_id' ";
-    $result = mysqli_query($data,$sql);
-    $info = $result->fetch_assoc();
+    public function updateAboutUs($id, $name, $position, $description, $image) {
+        $name = $this->conn->quote($name);
+        $position = $this->conn->quote($position);
+        $description = $this->conn->quote($description);
+
+        $dst = "./image/" . $image;
+        $dst_db = "image/" . $image;
+        move_uploaded_file($_FILES['image']['tmp_name'], $dst);
+
+        $sql = ($image)
+            ? "UPDATE aboutus SET name=$name, description=$description, position=$position, image='$dst_db' WHERE id=:id"
+            : "UPDATE aboutus SET name=$name, description=$description WHERE id=:id";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Update Success');</script>";
+        } else {
+            echo "<script>alert('Update Failed');</script>";
+        }
+    
+    }
 }
 
-if(isset($_POST['update_aboutus'])){
-    $p_id=$_POST['id'];
-    $name = mysqli_real_escape_string($data, $_POST['name']);
-    $pos = mysqli_real_escape_string($data, $_POST['position']);
-    $desc = mysqli_real_escape_string($data, $_POST['description']);
-    $file = $_FILES['image']['name'];
-    $dst="./image/".$file;
-    $dst_db="image/".$file;
-    move_uploaded_file($_FILES['image']['tmp_name'],$dst
-    );
+$data = new Database();
+$conn = $data->lidhu(); 
 
-    if($file){
-        $sql2 = "UPDATE aboutus SET name='$name',description='$desc',position='$pos',image='$dst_db' WHERE id='$p_id' ";
-    }else{
-        $sql2 = "UPDATE aboutus SET name='$name',description='$desc' WHERE id='$p_id' ";
-    }
+if ($_GET['aboutus_id']) {
+    $adminHome = new AdminHome($conn);
+    $info = $adminHome->getAboutUsInfo($_GET['aboutus_id']);
+}
 
-
-    $result2 = mysqli_query($data,$sql2);
-
-    if($result2){
-        echo "<script>alert('Update Success');</script>";
-    }else{
-        echo "<script>alert('Update Failed');</script>";
-    }
-
-
+if (isset($_POST['update_aboutus'])) {
+    $adminHome = new AdminHome($conn);
+    $adminHome->updateAboutUs($_POST['id'], $_POST['name'], $_POST['position'], $_POST['description'], $_FILES['image']['name']);
 }
 
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
 }
-
-
 ?>
 
 

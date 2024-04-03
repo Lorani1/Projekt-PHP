@@ -24,20 +24,16 @@ if(isset($_POST['submit'])) {
         $user_data = mysqli_fetch_assoc($result);
         $user_a = $user_data['user_a'];
         
-        // Set session variable for user type
         $_SESSION['user_type'] = $user_a;
 
         if($user_a == 1) {
-            // Regular user, redirect to Home_Signed.php
             header("Location: Home_Signed.php");
             exit();
         } elseif($user_a == 2) {
-            // Admin user, redirect to adminhome.php
             header("Location: adminhome.php");
             exit();
         }
     } else {
-        // Login failed
         echo "<script>displayAlert('Error: Invalid Username or Password.');</script>";
     }
 }

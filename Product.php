@@ -9,28 +9,35 @@ class Product
         $this->database = $database;
     }
 
-    public function addProduct($name, $description, $image, $tablename)
+    public function addProduct($name, $description, $image, $tableName)
     {
         $uploadDirectory = "./image/";
         $dst = $uploadDirectory . $image;
         $dst_db = "image/" . $image;
 
         if (move_uploaded_file($_FILES['image']['tmp_name'], $dst)) {
-            $data = $this->database->getConnection();
-            $name = mysqli_real_escape_string($data, $name);
-            $description = mysqli_real_escape_string($data, $description);
-
-            $sql = "INSERT INTO $tablename (name, description, image) VALUES ('$name', '$description', '$dst_db')";
-            $result = mysqli_query($data, $sql);
-
-            if (!$result) {
-                die("Error: " . mysqli_error($data));
+            try {
+                $conn = $this->database->lidhu();
+                
+                // Prepare the SQL statement
+                $stmt = $conn->prepare("INSERT INTO $tableName (name, description, image) VALUES (:name, :description, :image)");
+                
+                // Bind parameters
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':description', $description);
+                $stmt->bindParam(':image', $dst_db);
+                
+                // Execute the statement
+                $stmt->execute();
+                
+                return true; // Product added successfully
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                return false; // Failed to add product
             }
-
-            return true;
         }
 
-        return false;
+        return false; // Failed to upload image
     }
 }
 

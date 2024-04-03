@@ -1,67 +1,70 @@
 <?php
-
-// session_start();
-// error_reporting(0);
-// if(!isset($_SESSION['username'])){
-//     header("location:login.php");
-// }
-// else if($_SESSION['usertype']=='student'){
-//     header("location:login.php");
-// }
 include 'auth.php';
+include 'connect.php';
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
+class ExportUpdater {
+    private $conn;
 
-$data = mysqli_connect($host, $user, $password, $db);
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
 
+    public function getExportInfo($id) {
+        $sql = "SELECT * FROM export WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-if($_GET['export_id']){
-    $p_id=$_GET['export_id'];
-    $sql = "SELECT * FROM export WHERE id='$p_id' ";
-    $result = mysqli_query($data,$sql);
-    $info = $result->fetch_assoc();
+    public function updateExport($id, $Cname, $country, $Pname, $Cexport, $price, $message, $image) {
+        $Cname = htmlspecialchars($Cname); // Prevent XSS attacks
+        $country = htmlspecialchars($country); // Prevent XSS attacks
+        $Pname = htmlspecialchars($Pname); // Prevent XSS attacks
+        $Cexport = htmlspecialchars($Cexport); // Prevent XSS attacks
+        $price = htmlspecialchars($price); // Prevent XSS attacks
+        $message = htmlspecialchars($message); // Prevent XSS attacks
+
+        $file = $_FILES['image']['name'];
+        $dst = "./image/" . $file;
+        $dst_db = "image/" . $file;
+        move_uploaded_file($_FILES['image']['tmp_name'], $dst);
+
+        $sql = ($file)
+            ? "UPDATE export SET Cname=?, country=?, Pname=?, Cexport=?, price=?, message=?, image=? WHERE id=?"
+            : "UPDATE export SET Cname=?, country=?, Pname=?, Cexport=?, price=?, message=? WHERE id=?";
+        $stmt = $this->conn->prepare($sql);
+
+        if ($file) {
+            $stmt->execute([$Cname, $country, $Pname, $Cexport, $price, $message, $dst_db, $id]);
+        } else {
+            $stmt->execute([$Cname, $country, $Pname, $Cexport, $price, $message, $id]);
+        }
+
+        if ($stmt->rowCount() > 0) {
+            echo "<script>alert('Update Success');</script>";
+        } else {
+            echo "<script>alert('Update Failed');</script>";
+        }
+    }
 }
 
-if(isset($_POST['update_export'])){
-    $p_id=$_POST['id'];
-    $Cname = mysqli_real_escape_string($data, $_POST['Cname']);
-    $country = mysqli_real_escape_string($data, $_POST['country']);
-    $Pname = mysqli_real_escape_string($data, $_POST['Pname']);
-    $Cexport = mysqli_real_escape_string($data, $_POST['Cexport']);
-    $price = mysqli_real_escape_string($data, $_POST['price']);
-    $message = mysqli_real_escape_string($data, $_POST['message']);
-    $file = $_FILES['image']['name'];
-    $dst="./image/".$file;
-    $dst_db="image/".$file;
-    move_uploaded_file($_FILES['image']['tmp_name'],$dst
-    );
+$data = new Database();
+$conn = $data->lidhu(); // Get PDO connection
 
-    if($file){
-        $sql2 = "UPDATE export SET Cname='$Cname',country='$country',Pname='$Pname',Cexport='$Cexport',price='$price',message='$message',image='$dst_db' WHERE id='$p_id' ";
-    }else{
-        $sql2 = "UPDATE export SET Cname='$Cname',country='$country' WHERE id='$p_id' ";
-    }
+$exportUpdater = new ExportUpdater($conn);
 
+if ($_GET['export_id']) {
+    $info = $exportUpdater->getExportInfo($_GET['export_id']);
+}
 
-    $result2 = mysqli_query($data,$sql2);
-
-    if($result2){
-        echo "<script>alert('Update Success');</script>";
-    }else{
-        echo "<script>alert('Update Failed');</script>";
-    }
-
-
+if (isset($_POST['update_export'])) {
+    $exportUpdater->updateExport($_POST['id'], $_POST['Cname'], $_POST['country'], $_POST['Pname'], $_POST['Cexport'], $_POST['price'], $_POST['message'], $_FILES['image']['name']);
 }
 
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
 }
-
 ?>
 
 

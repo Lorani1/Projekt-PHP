@@ -1,35 +1,24 @@
 <?php
 include 'auth.php';
-class Database
-{
-    private $host = "localhost";
-    private $user = "root";
-    private $pass = "";
-    private $db = "projekt";
-    private $conn;
+include 'connect.php'; // Include the database connection file
 
-    public function connect()
-    {
-        $this->conn = new mysqli($this->host, $this->user, $this->pass, $this->db);
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
-        }
+class ContactRepository {
+    private $connection;
+
+    public function __construct() {
+        $db = new Database(); 
+        $this->connection = $db->lidhu(); 
     }
 
-    public function saveRecords($tbName, $n, $e, $m)
-    {
-        $stmt = $this->conn->prepare("INSERT INTO $tbName (name, email, message) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $n, $e, $m);
-        if ($stmt->execute()) {
-            // echo "Records Saved";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-        $stmt->close();
+    public function saveRecords($tbName, $n, $e, $m) {
+        $conn = $this->connection;
+        $stmt = $conn->prepare("INSERT INTO $tbName (name, email, message) VALUES (?, ?, ?)");
+        $stmt->execute([$n, $e, $m]); // You can directly pass the variables to execute
+        echo "<script>alert('Records Saved');</script>";
     }
 }
 
-$obj = new Database();
+$obj = new ContactRepository();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['apply'])) {
@@ -37,14 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
         $message = $_POST["message"];
        
-       
         if (empty($name) || empty($email) || empty($message)) {
             // Send error message to JavaScript
             echo "<script>displayAlert('Error: All fields are required.');</script>";
-            
         } else {
             // Save records
-            $obj->connect();
             $obj->saveRecords("contactus", $name, $email, $message);
             
             // Redirect to prevent form resubmission on refresh
@@ -53,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
 if ($_SESSION['user_type'] == 1) {
     // User type is 1, continue with regular user functionality
 } elseif ($_SESSION['user_type'] == 2) {
@@ -60,6 +47,8 @@ if ($_SESSION['user_type'] == 1) {
     redirectToAdminHome();
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,62 +1,67 @@
 <?php
-
-// session_start();
-// error_reporting(0);
-// if(!isset($_SESSION['username'])){
-//     header("location:login.php");
-// }
-// else if($_SESSION['usertype']=='student'){
-//     header("location:login.php");
-// }
 include 'auth.php';
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
+include 'connect.php';
 
-$data = mysqli_connect($host, $user, $password, $db);
+class SerbiaUpdater {
+    private $conn;
 
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
 
-if($_GET['serbia_id']){
-    $p_id=$_GET['serbia_id'];
-    $sql = "SELECT * FROM serbia WHERE id='$p_id' ";
-    $result = mysqli_query($data,$sql);
-    $info = $result->fetch_assoc();
+    public function getSerbiaInfo($id) {
+        $sql = "SELECT * FROM serbia WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function updateSerbia($id, $name, $description, $image) {
+        $name = mysqli_real_escape_string($this->conn, $name);
+        $description = mysqli_real_escape_string($this->conn, $description);
+
+        $file = $_FILES['image']['name'];
+        $dst = "./image/" . $file;
+        $dst_db = "image/" . $file;
+        move_uploaded_file($_FILES['image']['tmp_name'], $dst);
+
+        $sql = ($file)
+            ? "UPDATE serbia SET name=?, description=?, image=? WHERE id=?"
+            : "UPDATE serbia SET name=?, description=? WHERE id=?";
+        $stmt = $this->conn->prepare($sql);
+        if ($file) {
+            $stmt->bind_param('sssi', $name, $description, $dst_db, $id);
+        } else {
+            $stmt->bind_param('ssi', $name, $description, $id);
+        }
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Update Success');</script>";
+        } else {
+            echo "<script>alert('Update Failed');</script>";
+        }
+    }
 }
 
-if(isset($_POST['update_product'])){
-    $p_id=$_POST['id'];
-    $p_name = $_POST['name'];
-    $p_desc = mysqli_real_escape_string($data, $_POST['description']);
-    $file = $_FILES['image']['name'];
-    $dst="./image/".$file;
-    $dst_db="image/".$file;
-    move_uploaded_file($_FILES['image']['tmp_name'],$dst
-    );
+$data = new Database();
+$conn = $data->lidhu(); // Get MySQLi connection
 
-    if($file){
-        $sql2 = "UPDATE serbia SET name='$p_name',description='$p_desc',image='$dst_db' WHERE id='$p_id' ";
-    }else{
-        $sql2 = "UPDATE serbia SET name='$p_name',description='$p_desc' WHERE id='$p_id' ";
-    }
+$serbiaUpdater = new SerbiaUpdater($conn);
 
+if ($_GET['serbia_id']) {
+    $info = $serbiaUpdater->getSerbiaInfo($_GET['serbia_id']);
+}
 
-    $result2 = mysqli_query($data,$sql2);
-
-    if($result2){
-        echo "<script>alert('Update Success');</script>";
-    }else{
-        echo "<script>alert('Update Failed');</script>";
-    }
-
+if (isset($_POST['update_product'])) {
+    $serbiaUpdater->updateSerbia($_POST['id'], $_POST['name'], $_POST['description'], $_FILES['image']['name']);
 }
 
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
 }
-
-
 ?>
 
 

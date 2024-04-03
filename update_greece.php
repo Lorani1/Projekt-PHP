@@ -1,64 +1,66 @@
 <?php
-
-// session_start();
-// error_reporting(0);
-// if(!isset($_SESSION['username'])){
-//     header("location:login.php");
-// }
-// else if($_SESSION['usertype']=='student'){
-//     header("location:login.php");
-// }
 include 'auth.php';
+include 'connect.php';
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
+class GreeceUpdater {
+    private $conn;
 
-$data = mysqli_connect($host, $user, $password, $db);
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
 
+    public function getGreeceInfo($id) {
+        $sql = "SELECT * FROM greece WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-if($_GET['greece_id']){
-    $p_id=$_GET['greece_id'];
-    $sql = "SELECT * FROM greece WHERE id='$p_id' ";
-    $result = mysqli_query($data,$sql);
-    $info = $result->fetch_assoc();
+    public function updateGreece($id, $name, $description, $image) {
+        $name = htmlspecialchars($name); // Prevent XSS attacks
+        $description = htmlspecialchars($description); // Prevent XSS attacks
+
+        $file = $_FILES['image']['name'];
+        $dst = "./image/" . $file;
+        $dst_db = "image/" . $file;
+        move_uploaded_file($_FILES['image']['tmp_name'], $dst);
+
+        $sql = ($file)
+            ? "UPDATE greece SET name=?, description=?, image=? WHERE id=?"
+            : "UPDATE greece SET name=?, description=? WHERE id=?";
+        $stmt = $this->conn->prepare($sql);
+
+        if ($file) {
+            $stmt->execute([$name, $description, $dst_db, $id]);
+        } else {
+            $stmt->execute([$name, $description, $id]);
+        }
+
+        if ($stmt->rowCount() > 0) {
+            echo "<script>alert('Update Success');</script>";
+        } else {
+            echo "<script>alert('Update Failed');</script>";
+        }
+    }
 }
 
-if(isset($_POST['update_product'])){
-    $p_id=$_POST['id'];
-    $p_name = $_POST['name'];
-    $p_desc = mysqli_real_escape_string($data, $_POST['description']);
-    $file = $_FILES['image']['name'];
-    $dst="./image/".$file;
-    $dst_db="image/".$file;
-    move_uploaded_file($_FILES['image']['tmp_name'],$dst
-    );
+$data = new Database();
+$conn = $data->lidhu(); // Get PDO connection
 
-    if($file){
-        $sql2 = "UPDATE greece SET name='$p_name',description='$p_desc',image='$dst_db' WHERE id='$p_id' ";
-    }else{
-        $sql2 = "UPDATE greece SET name='$p_name',description='$p_desc' WHERE id='$p_id' ";
-    }
+$greeceUpdater = new GreeceUpdater($conn);
 
+if ($_GET['greece_id']) {
+    $info = $greeceUpdater->getGreeceInfo($_GET['greece_id']);
+}
 
-    $result2 = mysqli_query($data,$sql2);
-
-    if($result2){
-        echo "<script>alert('Update Success');</script>";
-    }else{
-        echo "<script>alert('Update Failed');</script>";
-    }
-
-
+if (isset($_POST['update_product'])) {
+    $greeceUpdater->updateGreece($_POST['id'], $_POST['name'], $_POST['description'], $_FILES['image']['name']);
 }
 
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
 }
-
-
 ?>
 
 

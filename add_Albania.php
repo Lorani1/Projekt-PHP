@@ -1,15 +1,10 @@
 <?php
-include_once "Database.php";
+include_once "connect.php";
 include_once "Product.php";
 include 'auth.php';
 
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
-
-$database = new Database($host, $user, $password, $db);
+$database = new Database();
 $product = new Product($database);
 
 if (isset($_POST['add_product'])) {
@@ -20,9 +15,11 @@ if (isset($_POST['add_product'])) {
     // Get the table name dynamically based on the page name
     $tableName = strtolower(substr(basename($_SERVER['PHP_SELF']), 4, -4));
 
+   
     if ($product->addProduct($name, $description, $image, $tableName)) {
+        // Handle success if needed
     } else {
-        echo "Failed to add product.";
+        echo "Failed to add Product.";
     }
 }
 
@@ -31,7 +28,6 @@ if ($_SESSION['user_type'] != 2) {
     redirectToLogin();
 }
 
-$database->closeConnection();
 ?>
 <!DOCTYPE html>
 <html lang="en">

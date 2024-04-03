@@ -1,56 +1,52 @@
 <?php
-include 'auht.php';
+include 'auth.php';
+include 'connect.php';
 class AdminDashboard
 {
     private $data;
-
-    public function __construct($host, $user, $password, $db)
+    public function __construct(Database $db)
     {
-        $this->data = mysqli_connect($host, $user, $password, $db);
-
-        if ($this->data === false) {
-            die("Connection error: " . mysqli_connect_error());
-        }
+        $this->db = $db;
     }
 
+   
     public function fetchContactUsData()
     {
-        $sql = "SELECT * FROM bosnia";
-        $result = mysqli_query($this->data, $sql);
+        $conn = $this->db->lidhu(); // Call the lidhu method to get the connection
 
-        if ($result === false) {
-            die("Error in SQL query: " . mysqli_error($this->data));
+        $sql = "SELECT * FROM bosnia";
+        $result = $conn->query($sql);
+
+        if (!$result) {
+            die("Error in SQL query: " . $conn->errorInfo()[2]);
         }
 
         return $result;
     }
+
 
     public function deleteContactUsData($id)
     {
-        $sql = "DELETE FROM bosnia WHERE id = $id";
-        $result = mysqli_query($this->data, $sql);
+        $conn = $this->db->lidhu(); // Call the lidhu method to get the connection
 
-        if ($result === false) {
-            die("Error in SQL query: " . mysqli_error($this->data));
+        $sql = "DELETE FROM bosnia WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$id]);
+
+        if ($stmt->rowCount() == 0) {
+            die("Error in deleting record");
         }
 
-        return $result;
+        return true;
     }
-
     public function closeConnection()
     {
-        mysqli_close($this->data);
+        $this->db->conn = null; // Close the connection
     }
 }
 
-// Replace these values with your database details
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
-
-$adminDashboard = new AdminDashboard($host, $user, $password, $db);
-
+$database = new Database(); 
+$adminDashboard = new AdminDashboard($database);
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
@@ -220,7 +216,7 @@ if ($_SESSION['user_type'] != 2) {
         <?php
         $result = $adminDashboard->fetchContactUsData();
 
-        if ($result->num_rows > 0) {
+        if ($result->rowCount() > 0) {
             ?>
             <table border="1px">
                 <tr>
@@ -231,7 +227,7 @@ if ($_SESSION['user_type'] != 2) {
                     <th style="padding: 20px; font-size: 15px;">Update</th>
                 </tr>
                 <?php
-                while ($info = $result->fetch_assoc()) {
+                while ($info = $result->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                     <tr>
                         <td style="padding: 20px;"><?php echo $info['name']; ?></td>

@@ -32,7 +32,7 @@ $dataHandler = new DatabaseHandler($host, $user, $password, $db);
 if (isset($_GET['student_id'])) {
     $user_id = $_GET['student_id'];
 
-    $tablesToDeleteFrom = ['contactus', 'albania', 'kosova', 'bosnia', 'hungary', 'bulgaria', 'macedonia', 'serbia', 'slovenia', 'montenegro', 'bulgaria', 'greece', 'aboutus','export'];
+    $tablesToDeleteFrom = ['contactus', 'albania', 'kosova', 'bosnia', 'hungary', 'bulgaria', 'macedonia', 'serbia', 'slovenia', 'montenegro', 'bulgaria', 'greece', 'aboutus','export','user'];
 
     foreach ($tablesToDeleteFrom as $table) {
         $result = $dataHandler->deleteRecord($table, $user_id);

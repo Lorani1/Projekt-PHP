@@ -1,47 +1,68 @@
 <?php
-
 include 'auth.php';
+include 'connect.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Form processing logic
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "projekt";
+class ExportHandler {
+    private $conn;
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
-    $stmt = $conn->prepare("INSERT INTO export (Cname, Country, pName, Cexport, Price, message, image) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssdss", $Name, $Country, $pName, $eCountry, $Price, $txt, $image);
+    public function insertExport($Name, $Country, $pName, $eCountry, $Price, $txt, $image) {
+        try {
+            $sql = "INSERT INTO export (Cname, Country, pName, Cexport, Price, message, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(1, $Name);
+            $stmt->bindParam(2, $Country);
+            $stmt->bindParam(3, $pName);
+            $stmt->bindParam(4, $eCountry);
+            $stmt->bindParam(5, $Price);
+            $stmt->bindParam(6, $txt);
+            $stmt->bindParam(7, $image);
+            $stmt->execute();
+            return true;
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
 
+    public function closeConnection() {
+        $this->conn = null; 
+    }
+}
+
+$database = new Database(); 
+$conn = $database->lidhu(); // Get PDO connection
+
+$exportHandler = new ExportHandler($conn);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Name = $_POST["Name"];
     $Country = $_POST["Country"];
     $pName = $_POST["pName"];
     $eCountry = $_POST["eCountry"];
     $Price = $_POST["Price"];
-    $txt = $_POST["txt"]; 
-    $image = $_FILES["image"]["name"]; 
+    $txt = $_POST["txt"];
+    $image = $_FILES["image"]["name"];
 
     if (empty($Name) || empty($Country) || empty($pName) || empty($eCountry) || empty($Price) || empty($txt) || empty($image)) {
         echo "<script>displayAlert('Error: All fields are required.');</script>";
     } else {
-        if ($stmt->execute()) {
+        if ($exportHandler->insertExport($Name, $Country, $pName, $eCountry, $Price, $txt, $image)) {
             echo "New record created successfully";
         } else {
-            echo "Error: " . $stmt->error;
+            echo "Error: Unable to insert record";
         }
-    
-        $stmt->close();
-        $conn->close();
+
+        $exportHandler->closeConnection();
 
         header("Location: Export.php");
         exit();
     }
 }
+
 if ($_SESSION['user_type'] == 1) {
     // User type is 1, continue with regular user functionality
 } elseif ($_SESSION['user_type'] == 2) {
@@ -49,8 +70,8 @@ if ($_SESSION['user_type'] == 1) {
     redirectToAdminHome();
 }
 
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,7 +200,7 @@ if ($_SESSION['user_type'] == 1) {
         <a href="Import.php" class="Bar-2">Import</a>
         <a href="Export.php">Export</a>
     </nav>
-
+    <p id="error" style="color:red;"></p>
     <form method="post" enctype="multipart/form-data"> <!-- Changed form action to submit.php -->
         <div class="Info">
             <div class="InputGroup">
@@ -230,7 +251,73 @@ if ($_SESSION['user_type'] == 1) {
             </div>
         </div>
     </form>
-    <script src="Export.js"></script>
+    <script>
+        const form = document.querySelector("form");
+        const errorElement = document.getElementById("error");
+
+form.addEventListener('submit', (e) => {
+    let messages = [];
+    
+    const inputs = form.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+        const inputValue = input.value.trim(); 
+
+     
+        if (inputValue === '' || inputValue === null) {
+            messages.push(`${input.name} is required`);
+        }
+
+    
+        switch(input.name) {
+            case 'Cname':
+                if (inputValue.length <= 4) {
+                    messages.push(`${input.name} should be longer than 4 characters`);
+                }
+                if (!/^[A-Z]/.test(inputValue)) {
+                    messages.push(`${input.name} should start with an uppercase letter`);
+                }
+                if (!/\d/.test(inputValue)) {
+                    messages.push(`${input.name} should contain at least 1 digit`);
+                }
+                break;
+            case 'pName': 
+                if (inputValue.length <= 4) {
+                    messages.push(`${input.name} should be longer than 4 characters`);
+                }
+                break;
+            case 'eCountry':
+                if (inputValue.length <= 4) {
+                    messages.push(`${input.name} should be longer than 4 characters`);
+                }
+                break;
+            case 'Price': 
+                if (isNaN(inputValue)) {
+                    messages.push(`${input.name} should be a valid number`);
+                }
+                break;
+            case 'image': 
+                const file = input.files[0];
+                const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+                if (!file) {
+                    messages.push(`Please select an image`);
+                } else if (!allowedExtensions.test(file.name)) {
+                    messages.push(`Invalid file type. Only JPG, JPEG, PNG, or GIF files are allowed.`);
+                }
+                break;
+        }
+    });
+
+   
+    if (messages.length > 0) {
+        e.preventDefault();
+        errorElement.innerText = messages.join(', ');
+    } else {
+        errorElement.innerText = ''; // Clear any previous error messages
+    }
+});
+
+    </script>
 </body>
 </html>
 

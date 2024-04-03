@@ -11,7 +11,7 @@ body {
     margin: 0;
     justify-content: flex-start;
     border: none;
-    background-color: lightgrey; /* Purple background */
+    background-color: lightgrey; 
     height: 50px;
     overflow: hidden;
 }
@@ -24,12 +24,12 @@ body {
 }
 
 .Bar a:hover {
-    background-color: rgb(42, 214, 42); /* Darker shade of purple on hover */
+    background-color: rgb(42, 214, 42); 
     height: 55px;
 }
 
 .Bar-1 {
-    background-color:rgb(42, 214, 42); /* Darker shade of purple */
+    background-color:rgb(42, 214, 42); 
     height: 50px;
     width: 40px;
 }

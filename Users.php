@@ -1,50 +1,54 @@
 <?php
 include 'auth.php';
+include 'connect.php';
 class AdminDashboard{
     private $data;
 
-    public function __construct($host,$user,$password,$db){
-        
-        $this->data = mysqli_connect($host,$user,$password,$db);
-        
-        if($this->data === false){
-            die("Connection error: " . mysqli_connect_error());
-        }
+    private $db;
+
+    public function __construct(Database $db)
+    {
+        $this->db = $db;
     }
-    public function fetchContactUsData(){
+    public function fetchContactUsData()
+    {
+        $conn = $this->db->lidhu(); // Call the lidhu method to get the connection
+
         $sql = "SELECT * FROM user";
-        $result = mysqli_query($this->data,$sql);
+        $result = $conn->query($sql);
 
-        if($result === false){
-            die("Error in SQL query " . mysqli_error($this->data));
-        }
-        return $result;
-    }
-
-    public function deleteContactUsData($id){
-        $sql = "DELETE FROM user WHERE id = $id";
-
-        $result = mysqli_query($this->data,$sql);
-
-        if($result === false){
-            echo("Error in SQL query " . mysqli_error($this->data));
+        if (!$result) {
+            die("Error in SQL query: " . $conn->errorInfo()[2]);
         }
 
         return $result;
     }
+    public function deleteContactUsData($id)
+    {
+        $conn = $this->db->lidhu(); // Call the lidhu method to get the connection
+    
+        $sql = "DELETE FROM user WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$id]);
+    
+        if ($stmt->rowCount() == 0) {
+            // If no rows were affected, indicate that the record was not found
+            die("Error: No record found with the provided ID");
+        }
+    
+        // If deletion was successful, return true
+        return true;
+    }
+    
 
-    public function closeConnection(){
-        mysqli_close($this->data);
+    public function closeConnection()
+    {
+        $this->db->conn = null; // Close the connection
     }
 }
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
-
-$adminDashboard = new AdminDashboard($host,$user,$password,$db);
-
+$database = new Database(); // Create an instance of the Database class
+$adminDashboard = new AdminDashboard($database);
 if ($_SESSION['user_type'] != 2) {
     // If user type is not 2, redirect back to login
     redirectToLogin();
@@ -210,7 +214,7 @@ if ($_SESSION['user_type'] != 2) {
         <?php
             $result = $adminDashboard->fetchContactUsData();
 
-            if($result->num_rows > 0){
+            if($result->rowCount() > 0){
                 ?>
                 <table border="1px">
                     <tr>
@@ -222,7 +226,7 @@ if ($_SESSION['user_type'] != 2) {
                         <th  style="padding: 20px; font-size: 15px;">Update</th>
                     </tr>
                     <?php
-                    while($info = $result->fetch_assoc()){
+                   while ($info = $result->fetch(PDO::FETCH_ASSOC)) {
                         ?>
                         <tr>
                             <td style="padding: 20px;"><?php echo $info['username']?></td>
@@ -230,13 +234,13 @@ if ($_SESSION['user_type'] != 2) {
                             <td style="padding: 20px;"><?php echo $info['password']?></td>
                             <td style="padding: 20px;"><?php echo $info['user_a']?></td>
                             <td style="padding: 20px;">
-                            <?php echo "<a onclick=\"javascript:return confirm('Are you sure you wanna delete this'); \" 
-                             href='delete.php?student_id={$info['id']}'>Delete</a>"; ?>
-                        </td>
-                        <td style="padding: 20px;color:black;">
-                            <?php echo " <a href='update_user.php?user_id={$info['id']}' class='btn btn-primary'>Update</a>";
-                            ?>
-                        </td>
+                                <?php echo "<a onclick=\"javascript:return confirm('Are you sure you wanna delete this'); \" 
+                                href='delete.php?student_id={$info['id']}'>Delete</a>"; ?>
+                            </td>
+                            <td style="padding: 20px;color:black;">
+                                <?php echo " <a href='update_user.php?user_id={$info['id']}' class='btn btn-primary'>Update</a>";
+                                ?>
+                            </td>
                         </tr>
                         <?php
                     }

@@ -1,15 +1,11 @@
 <?php
-include_once "Database.php";
+include_once "connect.php";
 include_once "Product.php";
 include 'auth.php';
-$host = "localhost";
-$user = "root";
-$password = "";
-$db = "projekt";
 
-$database = new Database($host, $user, $password, $db);
+
+$database = new Database();
 $product = new Product($database);
-
 if (isset($_POST['add_product'])) {
     $name = $_POST['name'];
     $description = $_POST['desc'];
@@ -29,7 +25,6 @@ if ($_SESSION['user_type'] != 2) {
 }
 
 
-$database->closeConnection();
 ?>
 <!DOCTYPE html>
 <html lang="en">
